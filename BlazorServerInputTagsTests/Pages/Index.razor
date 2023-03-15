@@ -1,0 +1,13 @@
+﻿@page "/"
+<PageTitle>InputTags - Blazor Server Demo</PageTitle>
+
+<h3>Basic usage</h3>
+<InputTags Value="Tags" />
+
+@code {
+    public List<string> Tags { get; set; } = new()
+    {
+        "Hello",
+        "World"
+    };
+}

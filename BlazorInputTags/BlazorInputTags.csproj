@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>BlazorInputTags</Title>
+		<Authors>Marvin Klein</Authors>
+		<Version>7.0.0</Version>
+		<Copyright>2023</Copyright>
+		<PackageReadmeFile>README.MD</PackageReadmeFile>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>tags, blazor, input, forms</PackageTags>
+		<Description>A simple to use blazor component for both Blazor Server and WebAssembly which adds a basic tag editor to your app.</Description>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\README.MD">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>

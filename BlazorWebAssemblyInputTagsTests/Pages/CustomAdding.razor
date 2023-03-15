@@ -1,0 +1,20 @@
+﻿@page "/CustomAdding"
+<h3>CustomAdding</h3>
+<p>This demonstrates how to work with the last inserted and removed tag.</p>
+<InputTags OnTagAdded="OnTagAddedAsync" OnTagRemoved="OnTagRemovedAsync" />
+
+@code {
+    public List<string> Tags { get; set; } = new();
+
+    private Task OnTagAddedAsync(string tag)
+    {
+        Tags.Add(tag);
+        return Task.CompletedTask;
+    }
+
+    private Task OnTagRemovedAsync(string tag)
+    {
+        Tags.Remove(tag);
+        return Task.CompletedTask;
+    }
+}

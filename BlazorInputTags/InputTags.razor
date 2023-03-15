@@ -1,0 +1,109 @@
+﻿@if (Options.DisplayLabel)
+{
+    <label class="@Options.LabelClass">@Label</label>
+}
+<div class="@Options.WrapperClass" tabindex="-1">
+    <ul class="@Options.TagListClass">
+        @foreach (var value in Value)
+        {
+            <li class="@Options.TagClass">@value <button type="button" title="@Options.RemoveButtonTooltip" @onclick="() => Value.Remove(value)">&times;</button></li>
+        }
+    </ul>
+
+    <input @ref="_reference" class="@Options.InputClass" type="text" placeholder="@Options.InputPlaceholder" @bind="Input" @bind:event="oninput" @onkeyup="OnKeyUp">
+</div>
+
+@code {
+    private string _input = string.Empty;
+    public string Input
+    {
+        get => _input;
+        set
+        {
+            _wasSetToEmpty = value == string.Empty;
+            _input = value;
+        }
+    }
+
+    private bool _wasSetToEmpty = false;
+
+    [Parameter]
+    public string Label { get; set; } = "Tags:";
+    [Parameter]
+    public List<string> Value { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<string> OnTagAdded { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnTagRemoved { get; set; }
+
+    [Parameter]
+    public InputTagOptions Options { get; set; } = new();
+
+    private ElementReference? _reference;
+
+    public Guid Guid { get; set; } = Guid.NewGuid();
+
+
+    private async Task OnKeyUp(KeyboardEventArgs e)
+    {
+        // Check both Key and Code because Key alone does not work on mobile.
+        if (e.Key == "Enter" || e.Code == "Enter")
+        {
+            if (string.IsNullOrWhiteSpace(Input))
+            {
+                return;
+            }
+
+            if (Options.MinLength > 0 && Input.Length < Options.MinLength)
+            {
+                return;
+            }
+
+            if (Options.MaxLength > 0 && Input.Length > Options.MaxLength)
+            {
+                return;
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(Input))
+            {
+                Task<bool> validationTask = Options.ValidateTag?.Invoke(Input) ?? Task.FromResult<bool>(true);
+
+                bool shouldAdd = await validationTask;
+                if (shouldAdd)
+                {
+                    Value.Add(Input);
+                    await OnTagAdded.InvokeAsync(Input);
+                    Input = string.Empty;
+                    // We need to override this value because the default text is an empty string. Otherwise, deleting a tag with backspace requried double backspace.
+                    _wasSetToEmpty = false;
+                }
+
+            }
+        }
+        else if (e.Key == "Backspace" || e.Code == "Backspace")
+        {
+            if (Value.Count > 0 && string.IsNullOrWhiteSpace(Input))
+            {
+                if (_wasSetToEmpty)
+                {
+                    // This value is being set everytime the input has changed it's content.
+                    // We need to ignore the first backspace in order to allow the user to delete characters.
+                    _wasSetToEmpty = false;
+                }
+                else
+                {
+                    string removedItem = Value[Value.Count - 1];
+                    Value.RemoveAt(Value.Count - 1);
+                    await OnTagRemoved.InvokeAsync(removedItem);
+                    if (_reference is not null)
+                    {
+                        await _reference.Value.FocusAsync();
+                    }
+                }
+            }
+        }
+    }
+}

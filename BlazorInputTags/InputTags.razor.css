@@ -1,0 +1,55 @@
+﻿
+.blazor-tag-wrapper {
+    background-color: var(--blazor-tag-wrapper-background-color, transparent);
+    border-radius: var(--blazor-tag-wrapper-border-radius, 2px);
+    border: var(--blazor-tag-wrapper-border, 1px solid silver);
+    display: flex;
+    align-items: center;
+}
+
+.blazor-tag-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: inline;
+}
+
+.blazor-tag {
+    display: inline-block;
+    background-color: var(--blazor-tag-background-color, rgba(218, 208, 225, 0.53));
+    padding: var(--blazor-tag-padding, .5em);
+    margin: var(--blazor-tag-margin, .125em);
+    border-radius: var(--blazor-tag-border-radius, 5px);
+    white-space: nowrap;
+}
+
+    .blazor-tag button {
+        font: inherit;
+        margin: 0;
+        padding: .25em;
+        line-height: 0.8;
+        margin-left: 6px;
+        border-radius: 2px;
+        background-color: transparent;
+        border: 2px solid transparent;
+        outline: none;
+        color: var(--blazor-tag-button-color, gray);
+        cursor: pointer;
+    }
+
+        .blazor-tag button:hover {
+            background-color: var(--blazor-tag-button-hover-background-color, rgba(255, 255, 255, 0.25));
+            color: var(--blazor-tag-button-hover-color, #666);
+        }
+
+        .blazor-tag button:focus {
+            border-color: var(--blazor-tag-button-focus-border-color, #c8c8c8);
+        }
+
+.blazor-tag-input {
+    font: inherit;
+    background: transparent;
+    border: none;
+    outline: none;
+    flex: 1;
+}
