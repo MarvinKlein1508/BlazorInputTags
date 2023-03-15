@@ -1,6 +1,8 @@
 # BlazorInputTags
 A simple to use blazor component for both Blazor Server and WebAssembly which adds a basic tag editor to your app.
 
+See a live [demo](https://marvinklein1508.github.io/BlazorInputTags/) right here on github.
+
 ![BlazorInputTags Demo](images/demo.png)
 
 ## Installation
