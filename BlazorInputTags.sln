@@ -3,18 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33513.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorInputTags", "BlazorInputTags\BlazorInputTags.csproj", "{3AFAD50D-4D20-4377-9692-4A937D3427F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorInputTags", "BlazorInputTags\BlazorInputTags.csproj", "{3AFAD50D-4D20-4377-9692-4A937D3427F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4D8125D8-CF29-4FBA-9803-7062252C63A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerInputTagsTests", "BlazorServerInputTagsTests\BlazorServerInputTagsTests.csproj", "{80F36897-7780-4D25-A759-0EA1C972359D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerInputTagsTests", "BlazorServerInputTagsTests\BlazorServerInputTagsTests.csproj", "{80F36897-7780-4D25-A759-0EA1C972359D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{B401F1CA-EB1B-4ADD-88A2-C80955D857B2}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE.MD = LICENSE.MD
 		README.MD = README.MD
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebAssemblyInputTagsTests", "BlazorWebAssemblyInputTagsTests\BlazorWebAssemblyInputTagsTests.csproj", "{503C1D86-486D-4871-B458-CE6F5C2CF754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebAssemblyInputTagsTests", "BlazorWebAssemblyInputTagsTests\BlazorWebAssemblyInputTagsTests.csproj", "{503C1D86-486D-4871-B458-CE6F5C2CF754}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

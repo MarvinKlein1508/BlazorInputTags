@@ -13,6 +13,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>tags, blazor, input, forms</PackageTags>
 		<Description>A simple to use blazor component for both Blazor Server and WebAssembly which adds a basic tag editor to your app.</Description>
+		<PackageLicenseFile>LICENSE.MD</PackageLicenseFile>
 	</PropertyGroup>
 
 
@@ -29,6 +30,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\LICENSE.MD">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\README.MD">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
