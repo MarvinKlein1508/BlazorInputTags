@@ -7,8 +7,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorInputTags.dll": "sha256-OslyPNrXRhWrS5Dukw27guX6BnRKI6nUtQMpb6v0PUo=",
-      "BlazorWebAssemblyInputTagsTests.dll": "sha256-hDD0twoonFour6cYR1oJR9uXepNb\/\/\/hcvaNiReyrP4=",
+      "BlazorInputTags.dll": "sha256-ZBCMYIAQedWuBMkJZui9easYWP1a+Xl+YIr00D9OphY=",
+      "BlazorWebAssemblyInputTagsTests.dll": "sha256-+ELdx3t4xOFAgAxh\/0tmSyzr54OmETIa9y7P70znzP4=",
       "Microsoft.AspNetCore.Components.dll": "sha256-HbAYeYUOiltv1np51OFIX5MqUhtJNZsLnMBdV\/qzuvU=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-Foua0Qp+xmcHA9iesl9+9AEBrd4s+9VQAeuthZM3e\/4=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-jZLGUNi\/PCnw9q3fv9CISkfeqzfFrPm143LIAsZYEO4=",
