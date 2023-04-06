@@ -61,7 +61,31 @@ You can pass an `InputTagOptions` instance to the component to override some cor
 |DisplayLabel|bool|true|Enabling the label of the component|
 |MinLength|int|0|Sets the minimum length for a tag. 0 = no minimum|
 |MaxLength|int|0|Sets the maximum length for a tag. 0 = no maximum|
-|ValidateTag|Func<string, Task<bool>>?|null|Define a custom function to validate the tag before it's being added to the list.|
+
+## Custom validation
+
+The component provides you with a parameter to do some custom validation before adding the tag to the list. This can be achieved like this:
+```csharp
+<InputTags Value="Tags" ValidateTag="ValidateTagAsync" />
+
+@code {
+    public List<string> Tags { get; set; } = new();
+    private List<string> _notAllowedTags = new()
+    {
+        "Cat",
+        "Horse",
+        "Dolphin"
+    };
+
+    private Task<bool> ValidateTagAsync(string tag)
+    {
+        bool result = !_notAllowedTags.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult(result);
+    }
+}
+```
+
+
 
 **Note: When changing the class names to something different, you'll need to add the CSS by yourself.** 
 

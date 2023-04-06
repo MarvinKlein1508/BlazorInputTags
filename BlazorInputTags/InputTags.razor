@@ -41,6 +41,12 @@
     [Parameter]
     public InputTagOptions Options { get; set; } = new();
 
+    /// <summary>
+    /// Function to validate the user input.
+    /// </summary>
+    [Parameter]
+    public Func<string, Task<bool>>? ValidateTag { get; set; }
+
     private ElementReference? _reference;
 
     public Guid Guid { get; set; } = Guid.NewGuid();
@@ -69,7 +75,7 @@
 
             if (!string.IsNullOrWhiteSpace(Input))
             {
-                Task<bool> validationTask = Options.ValidateTag?.Invoke(Input) ?? Task.FromResult<bool>(true);
+                Task<bool> validationTask = ValidateTag?.Invoke(Input) ?? Task.FromResult(true);
 
                 bool shouldAdd = await validationTask;
                 if (shouldAdd)

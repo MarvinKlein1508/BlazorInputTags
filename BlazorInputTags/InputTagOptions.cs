@@ -45,9 +45,5 @@
         /// <para>0 = No maximum length</para>
         /// </summary>
         public int MaxLength { get; set; }
-        /// <summary>
-        /// Function to validate the user input.
-        /// </summary>
-        public Func<string, Task<bool>>? ValidateTag { get; set; }
     }
 }

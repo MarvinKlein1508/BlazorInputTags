@@ -1,13 +1,12 @@
 ﻿@page "/CustomValidation"
 <h3>CustomValidation</h3>
 <p>This component does not accept the following tags: @(String.Join(",", _notAllowedTags))</p>
-<InputTags Value="Tags" Options="_options" />
+<InputTags Value="Tags" ValidateTag="ValidateTagAsync" />
 
 
 
 @code {
     public List<string> Tags { get; set; } = new();
-    private InputTagOptions _options;
     private List<string> _notAllowedTags = new()
     {
         "Cat",
@@ -15,13 +14,7 @@
         "Dolphin"
     };
 
-    public CustomValidation()
-    {
-        _options = new()
-        {
-            ValidateTag = ValidateTagAsync
-        };
-    }
+   
 
     private Task<bool> ValidateTagAsync(string tag)
     {
