@@ -1,4 +1,4 @@
-namespace BlazorServerInputTagsTests
+namespace BlazorServerDemo
 {
     public class Program
     {

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.6.33513.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorInputTags", "BlazorInputTags\BlazorInputTags.csproj", "{3AFAD50D-4D20-4377-9692-4A937D3427F2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4D8125D8-CF29-4FBA-9803-7062252C63A8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{4D8125D8-CF29-4FBA-9803-7062252C63A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerInputTagsTests", "BlazorServerInputTagsTests\BlazorServerInputTagsTests.csproj", "{80F36897-7780-4D25-A759-0EA1C972359D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerDemo", "BlazorServerDemo\BlazorServerDemo.csproj", "{80F36897-7780-4D25-A759-0EA1C972359D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{B401F1CA-EB1B-4ADD-88A2-C80955D857B2}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Pr
 		README.MD = README.MD
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebAssemblyInputTagsTests", "BlazorWebAssemblyInputTagsTests\BlazorWebAssemblyInputTagsTests.csproj", "{503C1D86-486D-4871-B458-CE6F5C2CF754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebAssemblyDemo", "BlazorWebAssemblyDemo\BlazorWebAssemblyDemo.csproj", "{503C1D86-486D-4871-B458-CE6F5C2CF754}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

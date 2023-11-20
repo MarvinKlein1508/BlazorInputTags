@@ -1,8 +1,7 @@
-using BlazorWebAssemblyInputTagsTests;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace BlazorWebAssemblyInputTagsTests
+namespace BlazorWebAssemblyDemo
 {
     public class Program
     {
