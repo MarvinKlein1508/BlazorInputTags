@@ -7,8 +7,8 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>BlazorInputTags</Title>
 		<Authors>Marvin Klein</Authors>
-		<Version>8.0.1</Version>
-		<Copyright>2023</Copyright>
+		<Version>8.0.4</Version>
+		<Copyright>2024</Copyright>
 		<PackageReadmeFile>README.MD</PackageReadmeFile>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>tags, blazor, input, forms</PackageTags>
@@ -22,15 +22,15 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.18" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.25" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.29" />
 	</ItemGroup>
 
 	<ItemGroup>
