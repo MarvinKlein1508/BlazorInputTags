@@ -1,8 +1,9 @@
 ﻿@page "/"
+@inject DataSource dataSource
 <PageTitle>InputTags - Blazor Server Demo</PageTitle>
 
 <h3>Basic usage</h3>
-<InputTags Value="Tags" />
+<GenericInputTags Value="dataSource.People" />
 
 @code {
     public List<string> Tags { get; set; } = new()
@@ -10,4 +11,6 @@
         "Hello",
         "World"
     };
+
+
 }

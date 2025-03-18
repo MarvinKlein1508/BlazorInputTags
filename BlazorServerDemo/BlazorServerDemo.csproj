@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorInputTags\BlazorInputTags.csproj" />
+    <ProjectReference Include="..\Demos.Shared\Demos.Shared.csproj" />
   </ItemGroup>
 
 </Project>

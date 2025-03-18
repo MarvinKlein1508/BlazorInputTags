@@ -1,0 +1,36 @@
+﻿@typeparam TValue
+
+
+
+<div class="blazor-tag-wrapper" tabindex="-1">
+    <ul class="blazor-tag-list">
+        @foreach (var item in Value)
+        {
+            <li class="blazor-tag">@item <button type="button" @onclick="() => Value.Remove(item)">&times;</button></li>
+        }
+        <li class="blazor-tag-input"><input @ref="_reference" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @bind:event="oninput"></li>
+    </ul>
+
+</div>
+
+
+@code {
+    private ElementReference? _reference;
+    private bool _wasSetToEmpty;
+    private string _input = string.Empty;
+    public string Input
+    {
+        get => _input;
+        set
+        {
+            _wasSetToEmpty = value == string.Empty;
+            _input = value;
+        }
+    }
+
+
+    [Parameter] public string Placeholder { get; set; } = string.Empty;
+    [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
+
+    [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
+}

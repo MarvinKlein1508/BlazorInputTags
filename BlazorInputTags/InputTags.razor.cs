@@ -1,0 +1,106 @@
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+
+namespace BlazorInputTags;
+
+public partial class InputTags
+{
+    private string _input = string.Empty;
+    public string Input
+    {
+        get => _input;
+        set
+        {
+            _wasSetToEmpty = value == string.Empty;
+            _input = value;
+        }
+    }
+
+    private bool _wasSetToEmpty = false;
+
+    [Parameter]
+    public string Label { get; set; } = "Tags:";
+    [Parameter]
+    public List<string> Value { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<string> OnTagAdded { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnTagRemoved { get; set; }
+
+    [Parameter]
+    public InputTagOptions Options { get; set; } = new();
+
+    /// <summary>
+    /// Function to validate the user input.
+    /// </summary>
+    [Parameter]
+    public Func<string, Task<bool>>? ValidateTag { get; set; }
+
+    private ElementReference? _reference;
+
+    public Guid Guid { get; set; } = Guid.NewGuid();
+
+
+    private async Task OnKeyUp(KeyboardEventArgs e)
+    {
+        // Check both Key and Code because Key alone does not work on mobile.
+        if (e.Key == "Enter" || e.Code == "Enter")
+        {
+            if (string.IsNullOrWhiteSpace(Input))
+            {
+                return;
+            }
+
+            if (Options.MinLength > 0 && Input.Length < Options.MinLength)
+            {
+                return;
+            }
+
+            if (Options.MaxLength > 0 && Input.Length > Options.MaxLength)
+            {
+                return;
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(Input))
+            {
+                Task<bool> validationTask = ValidateTag?.Invoke(Input) ?? Task.FromResult(true);
+
+                bool shouldAdd = await validationTask;
+                if (shouldAdd)
+                {
+                    Value.Add(Input);
+                    await OnTagAdded.InvokeAsync(Input);
+                    Input = string.Empty;
+                    // We need to override this value because the default text is an empty string. Otherwise, deleting a tag with backspace requried double backspace.
+                    _wasSetToEmpty = false;
+                }
+
+            }
+        }
+        else if (e.Key == "Backspace" || e.Code == "Backspace")
+        {
+            if (Value.Count > 0 && string.IsNullOrWhiteSpace(Input))
+            {
+                if (_wasSetToEmpty)
+                {
+                    // This value is being set everytime the input has changed it's content.
+                    // We need to ignore the first backspace in order to allow the user to delete characters.
+                    _wasSetToEmpty = false;
+                }
+                else
+                {
+                    string removedItem = Value[Value.Count - 1];
+                    Value.RemoveAt(Value.Count - 1);
+                    await OnTagRemoved.InvokeAsync(removedItem);
+                    if (_reference is not null)
+                    {
+                        await _reference.Value.FocusAsync();
+                    }
+                }
+            }
+        }
+    }
+}
