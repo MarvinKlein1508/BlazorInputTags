@@ -3,7 +3,7 @@
 <PageTitle>InputTags - Blazor Server Demo</PageTitle>
 
 <h3>Basic usage</h3>
-<GenericInputTags Value="dataSource.People" />
+<GenericInputTags TValue="Person" Value="dataSource.People" OnOptionsSearch="OnSearchPeopleAsync" />
 
 @code {
     public List<string> Tags { get; set; } = new()
@@ -12,5 +12,10 @@
         "World"
     };
 
+    private Task OnSearchPeopleAsync(OptionsSearchEventArgs<Person> e)
+    {
+        e.Items = dataSource.People.Where(p => p.FirstName.Contains(e.Text, StringComparison.OrdinalIgnoreCase));
+        return Task.CompletedTask;
+    }
 
 }

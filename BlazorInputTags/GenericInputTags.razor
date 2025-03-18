@@ -8,11 +8,16 @@
         {
             <li class="blazor-tag">@item <button type="button" @onclick="() => Value.Remove(item)">&times;</button></li>
         }
-        <li class="blazor-tag-input"><input @ref="_reference" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @bind:event="oninput"></li>
+        <li class="blazor-tag-input"><input @ref="_reference" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
     </ul>
-
 </div>
-
+<div class="blazor-tag-results">
+    @foreach (var item in _items)
+    {
+        <p>@item</p>
+    }
+</div>
+@Input
 
 @code {
     private ElementReference? _reference;
@@ -31,6 +36,23 @@
 
     [Parameter] public string Placeholder { get; set; } = string.Empty;
     [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
-
+    [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
     [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
+
+    private IEnumerable<TValue> _items = [];
+
+    private async Task InputHandlerAsync(ChangeEventArgs e)
+    {
+        Input = e.Value?.ToString() ?? string.Empty;
+
+        var args = new OptionsSearchEventArgs<TValue>()
+        {
+            Items = Array.Empty<TValue>(),
+            Text = Input,
+        };
+
+        await OnOptionsSearch.InvokeAsync(args);
+        _items = args.Items;
+
+    }
 }
