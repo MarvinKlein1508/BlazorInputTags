@@ -83,11 +83,6 @@
     max-width: 100%;
 }
 
-    .blazor-tag-results.hidden {
-        display: none;
-    }
-
-
     .blazor-tag-results li {
         cursor: pointer;
         padding: .5rem;

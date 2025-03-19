@@ -182,10 +182,7 @@ namespace BlazorInputTags
             return string.Empty;
         }
 
-        private string GetResultListClass()
-        {
-            return _showSearchResults ? "blazor-tag-results" : "blazor-tag-results hidden";
-        }
+
 
         public async ValueTask DisposeAsync()
         {
