@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
 namespace BlazorInputTags
@@ -9,14 +8,28 @@ namespace BlazorInputTags
         private readonly Guid _id = Guid.NewGuid();
         private bool _showSearchResults;
         private ElementReference? _reference;
+        private List<TValue> _searchResults = [];
         private DotNetObjectReference<GenericInputTags<TValue>>? _dotNetHelper = null;
         private IJSObjectReference Module { get; set; } = default!;
         private TValue? SelectedItem { get; set; }
+
+        [Parameter] public string Placeholder { get; set; } = string.Empty;
+        [Parameter] public string? Label { get; set; }
+        [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
+        [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
+        [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
         public string Input { get; set; } = string.Empty;
-        private async Task OnInputClick()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await SearchAsync();
+            if (firstRender)
+            {
+                Module = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorInputTags/GenericInputTags.razor.js");
+                _dotNetHelper = DotNetObjectReference.Create(this);
+                await Module.InvokeVoidAsync("initialize", _id, _dotNetHelper);
+            }
         }
+
+        private async Task OnInputClick() => await SearchAsync();
 
         private async Task OnInputFocusOutAsync()
         {
@@ -24,8 +37,6 @@ namespace BlazorInputTags
             await Task.Delay(150);
             _showSearchResults = false;
         }
-
-
         public async Task OnItemSelectedAsync(TValue item)
         {
             if (!Value.Remove(item))
@@ -38,7 +49,47 @@ namespace BlazorInputTags
 
             await _reference!.Value.FocusAsync();
         }
+        private async Task InputHandlerAsync(ChangeEventArgs e)
+        {
+            Input = e.Value?.ToString() ?? string.Empty;
+            await SearchAsync();
+        }
 
+        private async Task SearchAsync()
+        {
+            var args = new OptionsSearchEventArgs<TValue>()
+            {
+                Items = Array.Empty<TValue>(),
+                Text = Input,
+            };
+
+            await OnOptionsSearch.InvokeAsync(args);
+            _searchResults = [.. args.Items];
+
+            SelectedItem = _searchResults.FirstOrDefault();
+            _showSearchResults = true;
+        }
+
+        private string GetSearchResultClass(TValue item)
+        {
+            bool valueContainsItem = Value.Contains(item);
+            if (valueContainsItem && item!.Equals(SelectedItem))
+            {
+                return "blazor-tag-active blazor-tag-selected";
+            }
+            else if (valueContainsItem)
+            {
+                return "blazor-tag-active";
+            }
+            else if (item!.Equals(SelectedItem))
+            {
+                return "blazor-tag-selected";
+            }
+
+            return string.Empty;
+        }
+
+        #region JavaScript interop
         [JSInvokable]
         public async Task OnItemSelectedAsync()
         {
@@ -124,65 +175,7 @@ namespace BlazorInputTags
 
             await InvokeAsync(StateHasChanged);
         }
-        [Parameter] public string Placeholder { get; set; } = string.Empty;
-        [Parameter] public string? Label { get; set; }
-        [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
-        [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
-        [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
-
-        private List<TValue> _searchResults = [];
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-            {
-                Module = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorInputTags/GenericInputTags.razor.js");
-                _dotNetHelper = DotNetObjectReference.Create(this);
-                await Module.InvokeVoidAsync("initialize", _id, _dotNetHelper);
-            }
-        }
-
-        private async Task InputHandlerAsync(ChangeEventArgs e)
-        {
-            Input = e.Value?.ToString() ?? string.Empty;
-            await SearchAsync();
-        }
-
-        private async Task SearchAsync()
-        {
-            var args = new OptionsSearchEventArgs<TValue>()
-            {
-                Items = Array.Empty<TValue>(),
-                Text = Input,
-            };
-
-            await OnOptionsSearch.InvokeAsync(args);
-            _searchResults = [.. args.Items];
-
-            SelectedItem = _searchResults.FirstOrDefault();
-            _showSearchResults = true;
-        }
-
-        private string GetSearchResultClass(TValue item)
-        {
-            bool valueContainsItem = Value.Contains(item);
-            if (valueContainsItem && item!.Equals(SelectedItem))
-            {
-                return "blazor-tag-active blazor-tag-selected";
-            }
-            else if (valueContainsItem)
-            {
-                return "blazor-tag-active";
-            }
-            else if (item!.Equals(SelectedItem))
-            {
-                return "blazor-tag-selected";
-            }
-
-            return string.Empty;
-        }
-
-
+        #endregion
 
         public async ValueTask DisposeAsync()
         {
