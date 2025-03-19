@@ -19,92 +19,59 @@ Start by adding the using statement to your `_Imports.razor`
 @using BlazorInputTags
 ```
 
-You can either use an existing `List<string>` and provide it to the component 
-```csharp
-<InputTags Value="Tags" />
+You can provide any `List<T>` to the component like this
+```razor
+<InputTags TValue="Person" Value="PersonItems" OnOptionsSearch="OnSearchPeopleAsync" />
 
 @code {
-	public List<string> Tags { get; set; } = new();
-}
-```
+	public List<Person> PersonItems { get; set; } = [];
 
-Or you can do manage the list by yourself.
-
-```
-<InputTags OnTagAdded="OnTagAddedAsync" OnTagRemoved="OnTagRemovedAsync"/>
-
-@code {
-	private Task OnTagAddedAsync(string tag) {
-		// Do something with the tag
-		return Task.CompletedTask;
-	}
-
-	private Task OnTagRemovedAsync(string tag) {
-		// Do something with the tag
-		return Task.CompletedTask;
-	}
-}
-```
-
-## Providing options
-You can pass an `InputTagOptions` instance to the component to override some core logic and behaviour.
-
-|Option|Type|Default|Description
-|------|----|-------|-----------|
-|WrapperClass|string|blazor-tag-wrapper|Sets the CSS class name for the tag wrapper
-|TagListClass|string|blazor-tag-list|Sets the CSS class name for the tag list|
-|TagClass|string|blazor-tag|Sets the CSS class name for the tag|
-|InputClass|string|blazor-tag-input|Sets the CSS class name for the input field|
-|LabelClass|string|blazor-tag-label|Sets the CSS class name for the label|
-|RemoveButtonTooltip|string|Remove|Sets the text for delete tooltip button|
-|InputPlaceholder|string|Enter tag, add with Enter|Sets the placeholder text for the input field|
-|DisplayLabel|bool|true|Enabling the label of the component|
-|MinLength|int|0|Sets the minimum length for a tag. 0 = no minimum|
-|MaxLength|int|0|Sets the maximum length for a tag. 0 = no maximum|
-
-## Custom validation
-
-The component provides you with a parameter to do some custom validation before adding the tag to the list. This can be achieved like this:
-```csharp
-<InputTags Value="Tags" ValidateTag="ValidateTagAsync" />
-
-@code {
-    public List<string> Tags { get; set; } = new();
-    private List<string> _notAllowedTags = new()
+    private Task OnSearchPeopleAsync(OptionsSearchEventArgs<Person> e)
     {
-        "Cat",
-        "Horse",
-        "Dolphin"
-    };
-
-    private Task<bool> ValidateTagAsync(string tag)
-    {
-        bool result = !_notAllowedTags.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
-        return Task.FromResult(result);
+        e.Items = DataSource.People.Where(p => p.FirstName.Contains(e.Text, StringComparison.OrdinalIgnoreCase));
+        return Task.CompletedTask;
     }
 }
 ```
 
+`OnOptionsSearch` is an event that is triggered when the user types in the input field. You can use this event to provide a list of options to the user. The event is triggered with an `OptionsSearchEventArgs<T>` object which contains the search text and a list of items. You can set the items to the list of items you want to display to the user.
+
+## Parameters
+The following parameters are available for the component:
+
+|Option|Type|Default|Description
+|------|----|-------|-----------|
+|Placeholder|`string`|string.Empty|Some text which will be displayed within the input field
+|Label|`string?`|null|Text which should be displayed as label above the component|
+|Value|`List<T>`|[]|The list of items which you want to bind to the component|
+|OnOptionsSearch|`EventCallback<OptionsSearchEventArgs<TValue>>`|default|Callback to provide search results when the user is typing|
+|ItemTemplate|`RenderFragment<TValue>?`|null|Provide custom rendering to display items within the component and search|
 
 
-**Note: When changing the class names to something different, you'll need to add the CSS by yourself.** 
 
 ## Customizing design
 The component uses custom CSS variables which can be overwritten within any public CSS file.
 
-|Variable|Affects|
+|Variable|Default value|
 |--------|-------|
-|--blazor-tag-wrapper-background-color|.blazor-tag-wrapper|
-|--blazor-tag-wrapper-border-radius|.blazor-tag-wrapper|
-|--blazor-tag-wrapper-border|.blazor-tag-wrapper|
-|--blazor-tag-background-color|.blazor-tag|
-|--blazor-tag-padding|.blazor-tag|
-|--blazor-tag-margin|.blazor-tag|
-|--blazor-tag-border-radius|.blazor-tag|
-|--blazor-tag-button-color|.blazor-tag button|
-|--blazor-tag-button-hover-background-color|.blazor-tag button:hover|
-|--blazor-tag-button-hover-color|.blazor-tag button:hover|
-|--blazor-tag-button-focus-border-color|.blazor-tag button:focus|
+|--blazor-tag-input-wrapper-background-color|transparent|
+|--blazor-tag-input-wrapper-border|1px solid silver|
+|--blazor-tag-input-wrapper-border-radius|0.375rem|
+|--blazor-tag-item-background-color|#efefef|
+|--blazor-tag-item-padding|0 .75rem|
+|--blazor-tag-item-margin|.125em|
+|--blazor-tag-item-border-radius|var(--blazor-tag-input-wrapper-border-radius)|
+|--blazor-tag-item-color|#000|
+|--blazor-tag-item-button-border-radius|var(--blazor-tag-input-wrapper-border-radius)|
+|--blazor-tag-item-button-focus-border-color|#4b4b4b|
+|--blazor-tag-input-padding|.375rem .75rem|
+|--blazor-tag-input-border-radius|var(--blazor-tag-input-wrapper-border-radius)|
+|--blazor-tag-results-background-color|#fff|
+|--blazor-tag-results-padding|.25rem|
+|--blazor-tag-results-border|1px solid silver|
+|--blazor-tag-results-border-radius|var(--blazor-tag-input-wrapper-border-radius)|
+|--blazor-tag-results-item-border-radius|var(--blazor-tag-input-wrapper-border-radius)|
+|--blazor-tag-results-item-hover-background-color|#efefef|
 
 In addition you can overwrite or add any CSS using the corresponding selectors.
 
