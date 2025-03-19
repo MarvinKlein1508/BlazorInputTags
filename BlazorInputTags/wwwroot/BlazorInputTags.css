@@ -11,4 +11,10 @@
     --blazor-tag-item-button-focus-border-color: #4b4b4b;
     --blazor-tag-input-padding: .375rem .75rem;
     --blazor-tag-input-border-radius: var(--blazor-tag-input-wrapper-border-radius);
+    --blazor-tag-results-background-color: #fff;
+    --blazor-tag-results-padding: .25rem;
+    --blazor-tag-results-border: 1px solid silver;
+    --blazor-tag-results-border-radius: var(--blazor-tag-input-wrapper-border-radius);
+    --blazor-tag-results-item-border-radius: var(--blazor-tag-input-wrapper-border-radius);
+    --blazor-tag-results-item-hover-background-color: #efefef;
 }

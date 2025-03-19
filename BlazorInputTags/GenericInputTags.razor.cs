@@ -11,30 +11,24 @@ namespace BlazorInputTags
         private ElementReference? _reference;
         private DotNetObjectReference<GenericInputTags<TValue>>? _dotNetHelper = null;
         private IJSObjectReference Module { get; set; } = default!;
-        private bool _wasSetToEmpty;
-        private string _input = string.Empty;
+        
+        
 
         private bool _showSearchResults;
 
         private TValue? SelectedItem { get; set; }
-        public string Input
+        public string Input { get; set; } = string.Empty;
+        private async Task OnInputClick()
         {
-            get => _input;
-            set
-            {
-                _wasSetToEmpty = value == string.Empty;
-                _input = value;
-            }
+            await SearchAsync();
         }
 
-        private async Task OnFocusInAsync()
+        private async Task OnInputFocusOutAsync()
         {
-            if (SuggestItemsOnEmptySearch && Input == string.Empty)
-            {
-                await SearchAsync();
-            }
+            // Delay to let the UI refresh in case the user wants to select an item
+            await Task.Delay(150);
+            _showSearchResults = false;
         }
-
 
 
         public async Task OnItemSelectedAsync(TValue item)
@@ -70,6 +64,8 @@ namespace BlazorInputTags
         [JSInvokable]
         public async Task SelectNextItemAsync()
         {
+            _showSearchResults = true;
+            await InvokeAsync(StateHasChanged);
             if (SelectedItem is null)
             {
                 SelectedItem = _items.FirstOrDefault();
@@ -94,6 +90,9 @@ namespace BlazorInputTags
         [JSInvokable]
         public async Task SelectPreviousItemAsync()
         {
+            _showSearchResults = true;
+            await InvokeAsync(StateHasChanged);
+
             if (SelectedItem is null)
             {
                 SelectedItem = _items.FirstOrDefault();
@@ -114,12 +113,26 @@ namespace BlazorInputTags
 
             await InvokeAsync(StateHasChanged);
         }
+
+        [JSInvokable]
+        public async Task OnBackspaceAsync()
+        {
+            if (Input == string.Empty)
+            {
+                Value.RemoveAt(Value.Count - 1);
+            }
+            else
+            {
+                Input = Input[..^1];
+                await SearchAsync();
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
         [Parameter] public string Placeholder { get; set; } = string.Empty;
         [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
         [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
         [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
-
-        [Parameter] public bool SuggestItemsOnEmptySearch { get; set; }
 
         private List<TValue> _items = [];
 
@@ -136,13 +149,6 @@ namespace BlazorInputTags
         private async Task InputHandlerAsync(ChangeEventArgs e)
         {
             Input = e.Value?.ToString() ?? string.Empty;
-
-            if (_wasSetToEmpty && !SuggestItemsOnEmptySearch)
-            {
-                _items = [];
-                return;
-            }
-
             await SearchAsync();
         }
 
@@ -178,6 +184,11 @@ namespace BlazorInputTags
             }
 
             return string.Empty;
+        }
+
+        private string GetResultListClass()
+        {
+            return _showSearchResults ? "blazor-tag-results" : "blazor-tag-results hidden";
         }
     }
 }
