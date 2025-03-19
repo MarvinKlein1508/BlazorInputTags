@@ -58,17 +58,24 @@
 
 .blazor-tag-active {
     font-weight: bold;
+   
 }
 
 .blazor-tag-selected {
-    background-color: yellow;
+    outline: var(--blazor-tag-selected-outline, 1px solid #4b4b4b);
+    background-color: var(--blazor-tag-selected-background-color, #efefef);
 }
 
 .blazor-tag-results {
     list-style: none;
     padding: 0;
 }
-.blazor-tag-results li {
-    cursor: pointer;
-    padding: .5rem;
-}
+
+    .blazor-tag-results li {
+        cursor: pointer;
+        padding: .5rem;
+    }
+
+        .blazor-tag-results li:hover {
+            background-color: var(--blazor-tag-selected-hover, #efefef);
+        }

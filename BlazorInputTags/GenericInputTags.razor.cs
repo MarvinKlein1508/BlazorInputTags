@@ -41,6 +41,8 @@ namespace BlazorInputTags
             {
                 Value.Add(item);
             }
+
+            await _reference!.Value.FocusAsync();
         }
 
         [JSInvokable]
