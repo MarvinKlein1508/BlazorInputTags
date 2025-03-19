@@ -125,6 +125,7 @@ namespace BlazorInputTags
             await InvokeAsync(StateHasChanged);
         }
         [Parameter] public string Placeholder { get; set; } = string.Empty;
+        [Parameter] public string? Label { get; set; }
         [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
         [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
         [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }

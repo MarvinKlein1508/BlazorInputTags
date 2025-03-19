@@ -2,6 +2,10 @@
 @inject IJSRuntime jsRuntime
 
 <div class="blazor-tag-wrapper">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="@_id">@Label</label>
+    }
     <div class="blazor-tag-input-wrapper" tabindex="-1">
         <ul class="blazor-tag-list">
             @foreach (var item in Value)
