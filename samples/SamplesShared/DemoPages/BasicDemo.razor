@@ -1,0 +1,23 @@
+﻿@page "/basic-usage"
+@using SamplesShared.SampleData
+<PageTitle>Basic demo</PageTitle>
+
+<h3>Basic demo</h3>
+<GenericInputTags TValue="Person" Value="Items" OnOptionsSearch="OnSearchPeopleAsync" />
+
+@code {
+    public List<Person> Items { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        Items = new(DataSource.People);
+    }
+
+
+    private Task OnSearchPeopleAsync(OptionsSearchEventArgs<Person> e)
+    {
+        e.Items = DataSource.People.Where(p => p.FirstName.Contains(e.Text, StringComparison.OrdinalIgnoreCase));
+        return Task.CompletedTask;
+    }
+
+}

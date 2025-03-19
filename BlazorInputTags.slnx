@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Projektmappenelemente/" />
+  <Folder Name="/src/">
+	<Project Path="src/BlazorInputTags/BlazorInputTags.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/BlazorServerDemo/BlazorServerDemo.csproj" />
+	<Project Path="samples/SamplesShared/SamplesShared.csproj" />
+  </Folder>
+</Solution>

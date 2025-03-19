@@ -1,0 +1,56 @@
+﻿@page "/custom-item-template"
+@using SamplesShared.SampleData
+<PageTitle>Basic demo</PageTitle>
+
+<h3>Basic demo</h3>
+<GenericInputTags TValue="Person" Value="Items" OnOptionsSearch="OnSearchPeopleAsync">
+    <ItemTemplate Context="item">
+        @if(string.IsNullOrWhiteSpace(item.Picture))
+        {
+            <div class="blazor-tag-profile profile-text me-1">@GetDefaultInitials(item)</div> @item.GetName()
+        }
+        else
+        {
+            <img class="blazor-tag-profile me-1" src="@item.Picture" /> @item.GetName()
+        }
+    </ItemTemplate>
+</GenericInputTags>
+
+@code {
+    public List<Person> Items { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        Items = new(DataSource.People);
+    }
+
+
+    private Task OnSearchPeopleAsync(OptionsSearchEventArgs<Person> e)
+    {
+        e.Items = DataSource.People.Where(p => p.FirstName.Contains(e.Text, StringComparison.OrdinalIgnoreCase));
+        return Task.CompletedTask;
+    }
+
+
+
+    /// <summary />
+    private string GetDefaultInitials(Person person)
+    {
+        string name = $"{person.FirstName} {person.LastName}";
+
+        if (string.IsNullOrEmpty(name))
+        {
+            return string.Empty;
+        }
+
+        var parts = name.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts == null
+                || parts.Length == 0
+                || (parts.Length == 1 && parts[0] == string.Empty)
+            ? string.Empty
+            : parts.Length > 1
+            ? $"{parts[0][0]}{parts[1][0]}"
+            : $"{parts[0][0]}";
+    }
+
+}
