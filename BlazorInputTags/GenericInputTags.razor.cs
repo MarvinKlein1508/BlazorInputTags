@@ -31,6 +31,18 @@ namespace BlazorInputTags
             Console.WriteLine("EVENT FIRED");
         }
 
+        public async Task OnItemSelectedAsync(TValue item)
+        {
+            if (Value.Contains(item))
+            {
+                Value.Remove(item);
+            }
+            else
+            {
+                Value.Add(item);
+            }
+        }
+
         [JSInvokable]
         public async Task OnItemSelectedAsync()
         {
@@ -39,15 +51,7 @@ namespace BlazorInputTags
                 return;
             }
 
-            if (Value.Contains(SelectedItem))
-            {
-                Value.Remove(SelectedItem);
-            }
-            else
-            {
-                Value.Add(SelectedItem);
-            }
-
+            await OnItemSelectedAsync(SelectedItem);
             await InvokeAsync(StateHasChanged);
         }
         [JSInvokable]

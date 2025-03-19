@@ -14,7 +14,7 @@
 <ul class="blazor-tag-results">
     @foreach (var item in _items)
     {
-        <li class="@GetSearchResultClass(item)">@item</li>
+        <li class="@GetSearchResultClass(item)" @onclick="async () => await OnItemSelectedAsync(item)">@item</li>
     }
 </ul>
 @Input

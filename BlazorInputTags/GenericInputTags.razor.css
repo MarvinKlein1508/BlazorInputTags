@@ -63,3 +63,12 @@
 .blazor-tag-selected {
     background-color: yellow;
 }
+
+.blazor-tag-results {
+    list-style: none;
+    padding: 0;
+}
+.blazor-tag-results li {
+    cursor: pointer;
+    padding: .5rem;
+}
