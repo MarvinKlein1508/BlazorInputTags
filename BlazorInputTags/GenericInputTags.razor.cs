@@ -14,6 +14,8 @@ namespace BlazorInputTags
         private bool _wasSetToEmpty;
         private string _input = string.Empty;
 
+        private bool _showSearchResults;
+
         private TValue? SelectedItem { get; set; }
         public string Input
         {
@@ -34,6 +36,9 @@ namespace BlazorInputTags
                 Value.Add(item);
             }
 
+            _showSearchResults = false;
+            Input = string.Empty;
+
             await _reference!.Value.FocusAsync();
         }
 
@@ -46,6 +51,12 @@ namespace BlazorInputTags
             }
 
             await OnItemSelectedAsync(SelectedItem);
+            await InvokeAsync(StateHasChanged);
+        }
+        [JSInvokable]
+        public async Task HideSearchResultsAsync()
+        {
+            _showSearchResults = false;
             await InvokeAsync(StateHasChanged);
         }
         [JSInvokable]
@@ -126,6 +137,7 @@ namespace BlazorInputTags
             _items = [.. args.Items];
 
             SelectedItem = _items.FirstOrDefault();
+            _showSearchResults = true;
         }
 
         private string GetSearchResultClass(TValue item)

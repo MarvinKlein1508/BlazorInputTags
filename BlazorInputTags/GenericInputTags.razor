@@ -11,11 +11,13 @@
         <li class="blazor-tag-input"><input @ref="_reference" id="@_id" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
     </ul>
 </div>
-<ul class="blazor-tag-results">
-    @foreach (var item in _items)
-    {
-        <li class="@GetSearchResultClass(item)" @onclick="async () => await OnItemSelectedAsync(item)">@item</li>
-    }
-</ul>
-@Input
+@if (_showSearchResults)
+{
+    <ul class="blazor-tag-results">
+        @foreach (var item in _items)
+        {
+            <li class="@GetSearchResultClass(item)" @onclick="async () => await OnItemSelectedAsync(item)">@item</li>
+        }
+    </ul>
+}
 

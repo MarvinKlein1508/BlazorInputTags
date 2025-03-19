@@ -2,14 +2,14 @@
     var element = document.getElementById(id);
 
     element.addEventListener('keydown', function (e) {
-        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Escape") {
             e.stopPropagation();
             e.preventDefault();
         }
     });
 
     element.addEventListener('keyup', function (e) {
-        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Escape") {
             e.stopPropagation();
             e.preventDefault();
         }
@@ -20,6 +20,8 @@
             dotNetHelper.invokeMethodAsync("SelectNextItemAsync");
         } else if (e.key === "ArrowUp") {
             dotNetHelper.invokeMethodAsync("SelectPreviousItemAsync");
+        } else if (e.key === "Escape") {
+            dotNetHelper.invokeMethodAsync("HideSearchResultsAsync");
         }
 
     });
