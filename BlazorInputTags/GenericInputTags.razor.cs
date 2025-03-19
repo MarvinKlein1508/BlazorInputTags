@@ -45,7 +45,7 @@ namespace BlazorInputTags
         [JSInvokable]
         public async Task OnItemSelectedAsync()
         {
-            if (SelectedItem is null)
+            if (SelectedItem is null || !_showSearchResults)
             {
                 return;
             }
@@ -126,6 +126,12 @@ namespace BlazorInputTags
         private async Task InputHandlerAsync(ChangeEventArgs e)
         {
             Input = e.Value?.ToString() ?? string.Empty;
+
+            if (_wasSetToEmpty)
+            {
+                _items = [];
+                return;
+            }
 
             var args = new OptionsSearchEventArgs<TValue>()
             {
