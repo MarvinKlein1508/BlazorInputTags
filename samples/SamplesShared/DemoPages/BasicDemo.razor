@@ -3,10 +3,10 @@
 <PageTitle>Basic demo</PageTitle>
 
 <h3>Allow any input</h3>
-<GenericInputTags TValue="string" Value="Items" OnOptionsSearch="OnSearchTagAsync" Label="Tags" Placeholder="Enter tag" />
+<InputTags TValue="string" Value="Items" OnOptionsSearch="OnSearchTagAsync" Label="Tags" Placeholder="Enter tag" />
 
 <h3>Allow objects</h3>
-<GenericInputTags TValue="Person" Value="PersonItems" OnOptionsSearch="OnSearchPeopleAsync" Label="Contacts" Placeholder="Firstname" />
+<InputTags TValue="Person" Value="PersonItems" OnOptionsSearch="OnSearchPeopleAsync" Label="Contacts" Placeholder="Firstname" />
 
 @code {
     public List<string> Items { get; set; } = [];

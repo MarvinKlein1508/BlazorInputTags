@@ -1,105 +1,196 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
-namespace BlazorInputTags;
-
-public partial class InputTags
+namespace BlazorInputTags
 {
-    private string _input = string.Empty;
-    public string Input
+    public partial class InputTags<TValue> : IAsyncDisposable
     {
-        get => _input;
-        set
+        private readonly Guid _id = Guid.NewGuid();
+        private bool _showSearchResults;
+        private ElementReference? _reference;
+        private List<TValue> _searchResults = [];
+        private DotNetObjectReference<InputTags<TValue>>? _dotNetHelper = null;
+        private IJSObjectReference Module { get; set; } = default!;
+        private TValue? SelectedItem { get; set; }
+
+        [Parameter] public string Placeholder { get; set; } = string.Empty;
+        [Parameter] public string? Label { get; set; }
+        [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
+        [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
+        [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
+        public string Input { get; set; } = string.Empty;
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            _wasSetToEmpty = value == string.Empty;
-            _input = value;
-        }
-    }
-
-    private bool _wasSetToEmpty = false;
-
-    [Parameter]
-    public string Label { get; set; } = "Tags:";
-    [Parameter]
-    public List<string> Value { get; set; } = new();
-
-    [Parameter]
-    public EventCallback<string> OnTagAdded { get; set; }
-
-    [Parameter]
-    public EventCallback<string> OnTagRemoved { get; set; }
-
-    [Parameter]
-    public InputTagOptions Options { get; set; } = new();
-
-    /// <summary>
-    /// Function to validate the user input.
-    /// </summary>
-    [Parameter]
-    public Func<string, Task<bool>>? ValidateTag { get; set; }
-
-    private ElementReference? _reference;
-
-    public Guid Guid { get; set; } = Guid.NewGuid();
-
-
-    private async Task OnKeyUp(KeyboardEventArgs e)
-    {
-        // Check both Key and Code because Key alone does not work on mobile.
-        if (e.Key == "Enter" || e.Code == "Enter")
-        {
-            if (string.IsNullOrWhiteSpace(Input))
+            if (firstRender)
             {
-                return;
-            }
-
-            if (Options.MinLength > 0 && Input.Length < Options.MinLength)
-            {
-                return;
-            }
-
-            if (Options.MaxLength > 0 && Input.Length > Options.MaxLength)
-            {
-                return;
-            }
-
-
-            if (!string.IsNullOrWhiteSpace(Input))
-            {
-                Task<bool> validationTask = ValidateTag?.Invoke(Input) ?? Task.FromResult(true);
-
-                bool shouldAdd = await validationTask;
-                if (shouldAdd)
-                {
-                    Value.Add(Input);
-                    await OnTagAdded.InvokeAsync(Input);
-                    Input = string.Empty;
-                    // We need to override this value because the default text is an empty string. Otherwise, deleting a tag with backspace requried double backspace.
-                    _wasSetToEmpty = false;
-                }
-
+                Module = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorInputTags/InputTags.razor.js");
+                _dotNetHelper = DotNetObjectReference.Create(this);
+                await Module.InvokeVoidAsync("initialize", _id, _dotNetHelper);
             }
         }
-        else if (e.Key == "Backspace" || e.Code == "Backspace")
+
+        private async Task OnInputClick() => await SearchAsync();
+
+        private async Task OnInputFocusOutAsync()
         {
-            if (Value.Count > 0 && string.IsNullOrWhiteSpace(Input))
+            // Delay to let the UI refresh in case the user wants to select an item
+            await Task.Delay(150);
+            _showSearchResults = false;
+        }
+        public async Task OnItemSelectedAsync(TValue item)
+        {
+            if (!Value.Remove(item))
             {
-                if (_wasSetToEmpty)
+                Value.Add(item);
+            }
+
+            _showSearchResults = false;
+            Input = string.Empty;
+
+            await _reference!.Value.FocusAsync();
+        }
+        private async Task InputHandlerAsync(ChangeEventArgs e)
+        {
+            Input = e.Value?.ToString() ?? string.Empty;
+            await SearchAsync();
+        }
+
+        private async Task SearchAsync()
+        {
+            var args = new OptionsSearchEventArgs<TValue>()
+            {
+                Items = Array.Empty<TValue>(),
+                Text = Input,
+            };
+
+            await OnOptionsSearch.InvokeAsync(args);
+            _searchResults = [.. args.Items];
+
+            SelectedItem = _searchResults.FirstOrDefault();
+            _showSearchResults = true;
+        }
+
+        private string GetSearchResultClass(TValue item)
+        {
+            bool valueContainsItem = Value.Contains(item);
+            if (valueContainsItem && item!.Equals(SelectedItem))
+            {
+                return "blazor-tag-active blazor-tag-selected";
+            }
+            else if (valueContainsItem)
+            {
+                return "blazor-tag-active";
+            }
+            else if (item!.Equals(SelectedItem))
+            {
+                return "blazor-tag-selected";
+            }
+
+            return string.Empty;
+        }
+
+        #region JavaScript interop
+        [JSInvokable]
+        public async Task OnItemSelectedAsync()
+        {
+            if (SelectedItem is null || !_showSearchResults)
+            {
+                return;
+            }
+
+            await OnItemSelectedAsync(SelectedItem);
+            await InvokeAsync(StateHasChanged);
+        }
+        [JSInvokable]
+        public async Task HideSearchResultsAsync()
+        {
+            _showSearchResults = false;
+            await InvokeAsync(StateHasChanged);
+        }
+        [JSInvokable]
+        public async Task SelectNextItemAsync()
+        {
+            _showSearchResults = true;
+            await InvokeAsync(StateHasChanged);
+            if (SelectedItem is null)
+            {
+                SelectedItem = _searchResults.FirstOrDefault();
+            }
+            else
+            {
+                int currentIndex = _searchResults.IndexOf(SelectedItem);
+
+                if (currentIndex is -1)
                 {
-                    // This value is being set everytime the input has changed it's content.
-                    // We need to ignore the first backspace in order to allow the user to delete characters.
-                    _wasSetToEmpty = false;
+                    SelectedItem = _searchResults.FirstOrDefault();
                 }
-                else
+                else if (currentIndex + 1 < _searchResults.Count)
                 {
-                    string removedItem = Value[Value.Count - 1];
-                    Value.RemoveAt(Value.Count - 1);
-                    await OnTagRemoved.InvokeAsync(removedItem);
-                    if (_reference is not null)
-                    {
-                        await _reference.Value.FocusAsync();
-                    }
+                    SelectedItem = _searchResults[currentIndex + 1];
                 }
+            }
+
+
+            await InvokeAsync(StateHasChanged);
+        }
+        [JSInvokable]
+        public async Task SelectPreviousItemAsync()
+        {
+            _showSearchResults = true;
+            await InvokeAsync(StateHasChanged);
+
+            if (SelectedItem is null)
+            {
+                SelectedItem = _searchResults.FirstOrDefault();
+            }
+            else
+            {
+                int currentIndex = _searchResults.IndexOf(SelectedItem);
+
+                if (currentIndex is -1)
+                {
+                    SelectedItem = _searchResults.FirstOrDefault();
+                }
+                else if (currentIndex - 1 >= 0)
+                {
+                    SelectedItem = _searchResults[currentIndex - 1];
+                }
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+
+        [JSInvokable]
+        public async Task OnBackspaceAsync()
+        {
+            if (Input == string.Empty)
+            {
+                Value.RemoveAt(Value.Count - 1);
+            }
+            else
+            {
+                Input = Input[..^1];
+                await SearchAsync();
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+        #endregion
+
+        public async ValueTask DisposeAsync()
+        {
+            try
+            {
+                if (Module != null)
+                {
+                    await Module.DisposeAsync();
+                }
+            }
+            catch (Exception ex) when (ex is JSDisconnectedException ||
+                                       ex is OperationCanceledException)
+            {
+                // The JSRuntime side may routinely be gone already if the reason we're disposing is that
+                // the client disconnected. This is not an error.
             }
         }
     }

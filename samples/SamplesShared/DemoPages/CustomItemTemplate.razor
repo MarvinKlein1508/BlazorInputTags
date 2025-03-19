@@ -3,7 +3,7 @@
 <PageTitle>Basic demo</PageTitle>
 
 <h3>Basic demo</h3>
-<GenericInputTags TValue="Person" Value="Items" OnOptionsSearch="OnSearchPeopleAsync">
+<InputTags TValue="Person" Value="Items" OnOptionsSearch="OnSearchPeopleAsync">
     <ItemTemplate Context="item">
         @if(string.IsNullOrWhiteSpace(item.Picture))
         {
@@ -14,7 +14,7 @@
             <img class="blazor-tag-profile me-1" src="@item.Picture" /> @item.GetName()
         }
     </ItemTemplate>
-</GenericInputTags>
+</InputTags>
 
 @code {
     public List<Person> Items { get; set; } = [];

@@ -1,14 +1,49 @@
-﻿@if (Options.DisplayLabel)
-{
-    <label class="@Options.LabelClass">@Label</label>
-}
-<div class="@Options.WrapperClass" tabindex="-1">
-    <ul class="@Options.TagListClass">
-        @foreach (var value in Value)
-        {
-            <li class="@Options.TagClass">@value <button type="button" title="@Options.RemoveButtonTooltip" @onclick="() => Value.Remove(value)">&times;</button></li>
-        }
-    </ul>
+﻿@typeparam TValue
+@inject IJSRuntime jsRuntime
 
-    <input @ref="_reference" class="@Options.InputClass" type="text" placeholder="@Options.InputPlaceholder" @bind="Input" @bind:event="oninput" @onkeyup="OnKeyUp">
+<div class="blazor-tag-wrapper">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="@_id">@Label</label>
+    }
+    <div class="blazor-tag-input-wrapper" tabindex="-1">
+        <ul class="blazor-tag-list">
+            @foreach (var item in Value)
+            {
+                    <li class="blazor-tag">
+                        @if (ItemTemplate is not null)
+                        {
+                            @ItemTemplate(item)
+                        }
+                        else
+                        {
+                            @item
+                        }
+                        <button type="button" @onclick="() => Value.Remove(item)"></button>
+                    </li>
+            }
+            <li class="blazor-tag-input"><input @ref="_reference" id="@_id" @onclick="OnInputClick" @onfocusout="OnInputFocusOutAsync" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
+        </ul>
+    </div>
+
+    @if (_showSearchResults && _searchResults.Count > 0)
+    {
+        <ul class="blazor-tag-results">
+            @foreach (var item in _searchResults)
+            {
+                <li class="@GetSearchResultClass(item)" @onclick="async () => await OnItemSelectedAsync(item)">
+                    @if (ItemTemplate is not null)
+                    {
+                        @ItemTemplate(item)
+                    }
+                    else
+                    {
+                        @item
+                    }
+                </li>
+            }
+        </ul>
+    }
 </div>
+
+

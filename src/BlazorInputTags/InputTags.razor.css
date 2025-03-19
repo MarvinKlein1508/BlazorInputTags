@@ -1,54 +1,94 @@
 ﻿.blazor-tag-wrapper {
-    background-color: var(--blazor-tag-wrapper-background-color, transparent);
-    border-radius: var(--blazor-tag-wrapper-border-radius, 2px);
-    border: var(--blazor-tag-wrapper-border, 1px solid silver);
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.blazor-tag-input-wrapper {
+    background-color: var(--blazor-tag-input-wrapper-background-color);
+    border: var(--blazor-tag-input-wrapper-border);
+    border-radius: var(--blazor-tag-input-wrapper-border-radius);
 }
 
 .blazor-tag-list {
     padding: 0;
     margin: 0;
     list-style-type: none;
-    display: inline;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .blazor-tag {
-    display: inline-block;
-    background-color: var(--blazor-tag-background-color, rgba(218, 208, 225, 0.53));
-    padding: var(--blazor-tag-padding, .5em);
-    margin: var(--blazor-tag-margin, .125em);
-    border-radius: var(--blazor-tag-border-radius, 5px);
+    display: inline-flex;
+    background-color: var(--blazor-tag-item-background-color);
+    padding: var(--blazor-tag-item-padding);
+    margin: var(--blazor-tag-item-margin);
+    border-radius: var(--blazor-tag-item-border-radius);
     white-space: nowrap;
+    color: var(--blazor-tag-item-color);
+    align-items: center;
 }
 
     .blazor-tag button {
         font: inherit;
         margin: 0;
-        padding: .25em;
-        line-height: 0.8;
+        font-size: 1.5rem;
         margin-left: 6px;
-        border-radius: 2px;
-        background-color: transparent;
+        margin-right: -6px;
+        background-color: var(--blazor-tag-item-background-color);
+        border-radius: var(--blazor-tag-item-button-border-radius);
         border: 2px solid transparent;
         outline: none;
-        color: var(--blazor-tag-button-color, gray);
-        cursor: pointer;
     }
 
-        .blazor-tag button:hover {
-            background-color: var(--blazor-tag-button-hover-background-color, rgba(255, 255, 255, 0.25));
-            color: var(--blazor-tag-button-hover-color, #666);
+        .blazor-tag button::after {
+            display: inline-block;
+            content: "\00d7";
         }
 
         .blazor-tag button:focus {
-            border-color: var(--blazor-tag-button-focus-border-color, #c8c8c8);
+            border-color: var(--blazor-tag-item-button-focus-border-color);
         }
 
 .blazor-tag-input {
     font: inherit;
-    background: transparent;
+    padding: var(--blazor-tag-input-padding);
+    border-radius: var(--blazor-tag-input-border-radius);
     border: none;
     outline: none;
     flex: 1;
+    display: flex;
 }
+
+.blazor-tag-active {
+    font-weight: bold;
+}
+
+.blazor-tag-selected {
+    outline: var(--blazor-tag-selected-outline, 1px solid #4b4b4b);
+    background-color: var(--blazor-tag-selected-background-color, #efefef);
+}
+
+.blazor-tag-results {
+    list-style: none;
+    padding: var(--blazor-tag-results-padding);
+    background-color: var(--blazor-tag-results-background-color);
+    position: absolute;
+    z-index: 9999;
+    top: calc(100% + .5rem);
+    border: var(--blazor-tag-results-border);
+    border-radius: var(--blazor-tag-results-border-radius);
+    left: 0;
+    max-width: 100%;
+}
+
+    .blazor-tag-results li {
+        cursor: pointer;
+        padding: .5rem;
+        border-radius: var(--blazor-tag-results-item-border-radius);
+    }
+
+        .blazor-tag-results li:hover {
+            background-color: var(--blazor-tag-results-item-hover-background-color);
+        }
