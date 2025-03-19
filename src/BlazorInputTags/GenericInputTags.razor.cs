@@ -7,13 +7,10 @@ namespace BlazorInputTags
     public partial class GenericInputTags<TValue> : IAsyncDisposable
     {
         private readonly Guid _id = Guid.NewGuid();
-
+        private bool _showSearchResults;
         private ElementReference? _reference;
         private DotNetObjectReference<GenericInputTags<TValue>>? _dotNetHelper = null;
         private IJSObjectReference Module { get; set; } = default!;
-
-        private bool _showSearchResults;
-
         private TValue? SelectedItem { get; set; }
         public string Input { get; set; } = string.Empty;
         private async Task OnInputClick()
@@ -25,7 +22,7 @@ namespace BlazorInputTags
         {
             // Delay to let the UI refresh in case the user wants to select an item
             await Task.Delay(150);
-            //_showSearchResults = false;
+            _showSearchResults = false;
         }
 
 
@@ -66,19 +63,19 @@ namespace BlazorInputTags
             await InvokeAsync(StateHasChanged);
             if (SelectedItem is null)
             {
-                SelectedItem = _items.FirstOrDefault();
+                SelectedItem = _searchResults.FirstOrDefault();
             }
             else
             {
-                int currentIndex = _items.IndexOf(SelectedItem);
+                int currentIndex = _searchResults.IndexOf(SelectedItem);
 
                 if (currentIndex is -1)
                 {
-                    SelectedItem = _items.FirstOrDefault();
+                    SelectedItem = _searchResults.FirstOrDefault();
                 }
-                else if (currentIndex + 1 < _items.Count)
+                else if (currentIndex + 1 < _searchResults.Count)
                 {
-                    SelectedItem = _items[currentIndex + 1];
+                    SelectedItem = _searchResults[currentIndex + 1];
                 }
             }
 
@@ -93,19 +90,19 @@ namespace BlazorInputTags
 
             if (SelectedItem is null)
             {
-                SelectedItem = _items.FirstOrDefault();
+                SelectedItem = _searchResults.FirstOrDefault();
             }
             else
             {
-                int currentIndex = _items.IndexOf(SelectedItem);
+                int currentIndex = _searchResults.IndexOf(SelectedItem);
 
                 if (currentIndex is -1)
                 {
-                    SelectedItem = _items.FirstOrDefault();
+                    SelectedItem = _searchResults.FirstOrDefault();
                 }
                 else if (currentIndex - 1 >= 0)
                 {
-                    SelectedItem = _items[currentIndex - 1];
+                    SelectedItem = _searchResults[currentIndex - 1];
                 }
             }
 
@@ -132,7 +129,7 @@ namespace BlazorInputTags
         [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
         [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
 
-        private List<TValue> _items = [];
+        private List<TValue> _searchResults = [];
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -159,9 +156,9 @@ namespace BlazorInputTags
             };
 
             await OnOptionsSearch.InvokeAsync(args);
-            _items = [.. args.Items];
+            _searchResults = [.. args.Items];
 
-            SelectedItem = _items.FirstOrDefault();
+            SelectedItem = _searchResults.FirstOrDefault();
             _showSearchResults = true;
         }
 

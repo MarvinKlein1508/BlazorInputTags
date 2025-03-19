@@ -23,7 +23,7 @@
     </div>
 
     <ul class="@GetResultListClass()">
-        @foreach (var item in _items)
+        @foreach (var item in _searchResults)
         {
             <li class="@GetSearchResultClass(item)" @onclick="async () => await OnItemSelectedAsync(item)">
                 @if (ItemTemplate is not null)
