@@ -8,7 +8,7 @@
         {
             <li class="blazor-tag">@item <button type="button" @onclick="() => Value.Remove(item)">&times;</button></li>
         }
-        <li class="blazor-tag-input"><input @ref="_reference" id="@_id" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
+        <li class="blazor-tag-input"><input @ref="_reference" id="@_id" @onfocusin="OnFocusInAsync" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
     </ul>
 </div>
 @if (_showSearchResults)

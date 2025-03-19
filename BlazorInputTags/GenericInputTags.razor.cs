@@ -27,6 +27,14 @@ namespace BlazorInputTags
             }
         }
 
+        private async Task OnFocusInAsync()
+        {
+            if (SuggestItemsOnEmptySearch && Input == string.Empty)
+            {
+                await SearchAsync();
+            }
+        }
+
 
 
         public async Task OnItemSelectedAsync(TValue item)
@@ -111,6 +119,8 @@ namespace BlazorInputTags
         [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
         [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
 
+        [Parameter] public bool SuggestItemsOnEmptySearch { get; set; }
+
         private List<TValue> _items = [];
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -127,12 +137,17 @@ namespace BlazorInputTags
         {
             Input = e.Value?.ToString() ?? string.Empty;
 
-            if (_wasSetToEmpty)
+            if (_wasSetToEmpty && !SuggestItemsOnEmptySearch)
             {
                 _items = [];
                 return;
             }
 
+            await SearchAsync();
+        }
+
+        private async Task SearchAsync()
+        {
             var args = new OptionsSearchEventArgs<TValue>()
             {
                 Items = Array.Empty<TValue>(),
