@@ -1,5 +1,4 @@
-﻿
-.blazor-tag-wrapper {
+﻿.blazor-tag-wrapper {
     background-color: var(--blazor-tag-wrapper-background-color, transparent);
     border-radius: var(--blazor-tag-wrapper-border-radius, 2px);
     border: var(--blazor-tag-wrapper-border, 1px solid silver);

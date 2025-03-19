@@ -1,0 +1,14 @@
+﻿:root {
+    --blazor-tag-input-wrapper-background-color: transparent;
+    --blazor-tag-input-wrapper-border: 1px solid silver;
+    --blazor-tag-input-wrapper-border-radius: 0.375rem;
+    --blazor-tag-item-background-color: #efefef;
+    --blazor-tag-item-padding: 0 .75rem;
+    --blazor-tag-item-margin: .125em;
+    --blazor-tag-item-border-radius: var(--blazor-tag-input-wrapper-border-radius);
+    --blazor-tag-item-color: #000;
+    --blazor-tag-item-button-border-radius: var(--blazor-tag-input-wrapper-border-radius);
+    --blazor-tag-item-button-focus-border-color: #4b4b4b;
+    --blazor-tag-input-padding: .375rem .75rem;
+    --blazor-tag-input-border-radius: var(--blazor-tag-input-wrapper-border-radius);
+}

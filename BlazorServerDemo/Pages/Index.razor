@@ -5,8 +5,13 @@
 <h3>Basic usage</h3>
 <GenericInputTags TValue="Person" SuggestItemsOnEmptySearch="true" Value="Items" OnOptionsSearch="OnSearchPeopleAsync" />
 
+<br />
+
+<GenericInputTags TValue="Person" Value="Items2" OnOptionsSearch="OnSearchPeopleAsync" />
+
 @code {
     public List<Person> Items { get; set; } = [];
+    public List<Person> Items2 { get; set; } = [];
 
     protected override void OnInitialized()
     {

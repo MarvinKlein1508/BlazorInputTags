@@ -29,11 +29,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.0" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-		<Folder Include="wwwroot\" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<None Include="..\LICENSE.MD">
 		  <Pack>True</Pack>
