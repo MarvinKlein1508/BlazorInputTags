@@ -1,5 +1,8 @@
 <Solution>
-  <Folder Name="/Projektmappenelemente/" />
+  <Folder Name="/Projektmappenelemente/">
+    <File Path="LICENSE.MD" />
+    <File Path="README.MD" />
+  </Folder>
   <Folder Name="/src/">
 	<Project Path="src/BlazorInputTags/BlazorInputTags.csproj" />
   </Folder>
