@@ -55,3 +55,11 @@
     flex: 1;
     display: flex;
 }
+
+.blazor-tag-active {
+    font-weight: bold;
+}
+
+.blazor-tag-selected {
+    background-color: yellow;
+}

@@ -1,5 +1,5 @@
 ﻿@typeparam TValue
-
+@inject IJSRuntime jsRuntime
 
 
 <div class="blazor-tag-wrapper" tabindex="-1">
@@ -8,51 +8,14 @@
         {
             <li class="blazor-tag">@item <button type="button" @onclick="() => Value.Remove(item)">&times;</button></li>
         }
-        <li class="blazor-tag-input"><input @ref="_reference" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
+        <li class="blazor-tag-input"><input @ref="_reference" id="@_id" class="blazor-tag-input" type="text" placeholder="@Placeholder" @bind="Input" @oninput="InputHandlerAsync"></li>
     </ul>
 </div>
-<div class="blazor-tag-results">
+<ul class="blazor-tag-results">
     @foreach (var item in _items)
     {
-        <p>@item</p>
+        <li class="@GetSearchResultClass(item)">@item</li>
     }
-</div>
+</ul>
 @Input
 
-@code {
-    private ElementReference? _reference;
-    private bool _wasSetToEmpty;
-    private string _input = string.Empty;
-    public string Input
-    {
-        get => _input;
-        set
-        {
-            _wasSetToEmpty = value == string.Empty;
-            _input = value;
-        }
-    }
-
-
-    [Parameter] public string Placeholder { get; set; } = string.Empty;
-    [Parameter] public List<TValue> Value { get; set; } = new List<TValue>();
-    [Parameter] public EventCallback<OptionsSearchEventArgs<TValue>> OnOptionsSearch { get; set; }
-    [Parameter] public RenderFragment<TValue>? ItemTemplate { get; set; }
-
-    private IEnumerable<TValue> _items = [];
-
-    private async Task InputHandlerAsync(ChangeEventArgs e)
-    {
-        Input = e.Value?.ToString() ?? string.Empty;
-
-        var args = new OptionsSearchEventArgs<TValue>()
-        {
-            Items = Array.Empty<TValue>(),
-            Text = Input,
-        };
-
-        await OnOptionsSearch.InvokeAsync(args);
-        _items = args.Items;
-
-    }
-}

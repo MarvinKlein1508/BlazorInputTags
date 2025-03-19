@@ -3,14 +3,16 @@
 <PageTitle>InputTags - Blazor Server Demo</PageTitle>
 
 <h3>Basic usage</h3>
-<GenericInputTags TValue="Person" Value="dataSource.People" OnOptionsSearch="OnSearchPeopleAsync" />
+<GenericInputTags TValue="Person" Value="Items" OnOptionsSearch="OnSearchPeopleAsync" />
 
 @code {
-    public List<string> Tags { get; set; } = new()
+    public List<Person> Items { get; set; } = [];
+
+    protected override void OnInitialized()
     {
-        "Hello",
-        "World"
-    };
+        Items = new(dataSource.People);
+    }
+
 
     private Task OnSearchPeopleAsync(OptionsSearchEventArgs<Person> e)
     {
