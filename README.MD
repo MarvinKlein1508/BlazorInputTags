@@ -15,7 +15,7 @@ Or via the Visual Studio package manger.
 ## Basic usage
 Start by adding the using statement to your `_Imports.razor`
 
-```csharp
+```razor
 @using BlazorInputTags
 ```
 
