@@ -25,19 +25,11 @@ namespace BlazorInputTags
             }
         }
 
-        [JSInvokable]
-        public async Task OnKeyUpRaisedAsync()
-        {
-            Console.WriteLine("EVENT FIRED");
-        }
+
 
         public async Task OnItemSelectedAsync(TValue item)
         {
-            if (Value.Contains(item))
-            {
-                Value.Remove(item);
-            }
-            else
+            if (!Value.Remove(item))
             {
                 Value.Add(item);
             }
