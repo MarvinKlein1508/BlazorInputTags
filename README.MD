@@ -19,6 +19,20 @@ Start by adding the using statement to your `_Imports.razor`
 @using BlazorInputTags
 ```
 
+Next you'll need to add the CSS to your project. 
+
+For .NET 8 add this line to your head section within the `App.razor` file:
+```html
+<link rel="stylesheet" href="_content/BlazorInputTags/BlazorInputTags.css" />
+```
+
+If you are using .NET 9 and the fingerprinted ressources then you'll need to add this line to your head section within `App.razor`:
+```razor
+<link rel="stylesheet" href="@Assets["_content/BlazorInputTags/BlazorInputTags.css"]" />
+```
+
+Alternatively you can define all variabels in your custom CSS.
+
 You can provide any `List<T>` to the component like this
 ```razor
 <InputTags TValue="Person" Value="PersonItems" OnOptionsSearch="OnSearchPeopleAsync" />
